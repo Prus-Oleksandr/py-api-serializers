@@ -41,6 +41,22 @@ class MovieDetailSerializer(serializers.ModelSerializer):
         return attrs
 
 
+class MovieCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Movie
+        fields = ("title", "description", "duration", "genres", "actors")
+
+    def validate_title(self, value):
+        if not value or len(value.strip()) == 0:
+            raise serializers.ValidationError("Title cannot be empty.")
+        return value
+
+    def validate_duration(self, value):
+        if value <= 0:
+            raise serializers.ValidationError("Duration must be positive.")
+        return value
+
+
 class MovieListSerializer(serializers.ModelSerializer):
     genres = serializers.SlugRelatedField(
         slug_field="name",

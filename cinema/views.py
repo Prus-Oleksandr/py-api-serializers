@@ -8,7 +8,7 @@ from cinema.serializers import (
     MovieDetailSerializer,
     CinemaHallSerializer,
     MovieSessionListSerializer,
-    MovieSessionDetailSerializer, MovieSessionSerializer,
+    MovieSessionDetailSerializer, MovieSessionSerializer, MovieCreateSerializer,
 )
 
 
@@ -34,6 +34,8 @@ class MovieViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         if self.action == "list":
             return MovieListSerializer
+        if self.action == "create":
+            return MovieCreateSerializer
         return MovieDetailSerializer
 
 
