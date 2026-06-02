@@ -17,6 +17,7 @@ class CinemaHallSerializer(serializers.ModelSerializer):
 
 class ActorSerializer(serializers.ModelSerializer):
     full_name = serializers.CharField(source="get_full_name")
+
     class Meta:
         model = Actor
         fields = ("id", "first_name", "last_name", "full_name")
