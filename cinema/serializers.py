@@ -31,6 +31,13 @@ class MovieDetailSerializer(serializers.ModelSerializer):
         model = Movie
         fields = ("id", "title", "description", "duration", "genres", "actors")
 
+    def validate(self, attrs):
+        if not attrs.get("title"):
+            raise serializers.ValidationError(
+                {"title": "This field is required."}
+            )
+        return attrs
+
 
 class MovieListSerializer(serializers.ModelSerializer):
     genres = serializers.SlugRelatedField(
