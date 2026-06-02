@@ -16,9 +16,10 @@ class CinemaHallSerializer(serializers.ModelSerializer):
 
 
 class ActorSerializer(serializers.ModelSerializer):
+    full_name = serializers.CharField(source="get_full_name")
     class Meta:
         model = Actor
-        fields = ("id", "first_name", "last_name", "get_full_name")
+        fields = ("id", "first_name", "last_name", "full_name")
 
 
 class MovieDetailSerializer(serializers.ModelSerializer):
@@ -78,7 +79,7 @@ class MovieSessionListSerializer(serializers.ModelSerializer):
 
 class MovieSessionDetailSerializer(serializers.ModelSerializer):
     movie = MovieListSerializer(read_only=True)
-    cinema_hall = CinemaHallSerializer(read_only=True)
+    cinema_hall = CinemaHallSerializer(read_only=False)
 
     class Meta:
         model = MovieSession
