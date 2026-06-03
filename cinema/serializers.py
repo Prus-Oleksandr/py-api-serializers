@@ -1,3 +1,4 @@
+from typing import Any, Dict
 from rest_framework import serializers
 
 from cinema.models import Genre, Movie, Actor, MovieSession, CinemaHall
@@ -16,7 +17,9 @@ class CinemaHallSerializer(serializers.ModelSerializer):
 
 
 class ActorSerializer(serializers.ModelSerializer):
-    full_name = serializers.CharField(source="get_full_name", read_only=True)
+    full_name = serializers.CharField(
+        source="get_full_name", read_only=True
+    )
 
     class Meta:
         model = Actor
@@ -33,7 +36,7 @@ class MovieDetailSerializer(serializers.ModelSerializer):
         model = Movie
         fields = ("id", "title", "description", "duration", "genres", "actors")
 
-    def validate(self, attrs):
+    def validate(self, attrs: Dict[str, Any]) -> Dict[str, Any]:
         if not attrs.get("title"):
             raise serializers.ValidationError(
                 {"title": "This field is required."}
@@ -46,12 +49,12 @@ class MovieCreateSerializer(serializers.ModelSerializer):
         model = Movie
         fields = ("title", "description", "duration", "genres", "actors")
 
-    def validate_title(self, value):
+    def validate_title(self, value: str) -> str:
         if not value or len(value.strip()) == 0:
             raise serializers.ValidationError("Title cannot be empty.")
         return value
 
-    def validate_duration(self, value):
+    def validate_duration(self, value: int) -> int:
         if value <= 0:
             raise serializers.ValidationError("Duration must be positive.")
         return value
@@ -64,7 +67,9 @@ class MovieListSerializer(serializers.ModelSerializer):
         many=True
     )
     actors = serializers.SlugRelatedField(
-        slug_field="get_full_name", read_only=True, many=True
+        slug_field="get_full_name",
+        read_only=True,
+        many=True
     )
 
     class Meta:
@@ -107,7 +112,9 @@ class MovieSessionDetailSerializer(serializers.ModelSerializer):
 
 
 class MovieSessionSerializer(serializers.ModelSerializer):
-    movie = serializers.PrimaryKeyRelatedField(queryset=Movie.objects.all())
+    movie = serializers.PrimaryKeyRelatedField(
+        queryset=Movie.objects.all()
+    )
     cinema_hall = serializers.PrimaryKeyRelatedField(
         queryset=CinemaHall.objects.all()
     )
